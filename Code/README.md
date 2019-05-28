@@ -1,4 +1,4 @@
-#Recurrent neural network with adaptive gradient descent
+# Recurrent neural network with adaptive gradient descent
 
 Find the ground state and ground state energy of a simple pairing.
 
