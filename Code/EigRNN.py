@@ -1,4 +1,6 @@
 import numpy as np
+from hamiltonian import *
+import sys
 
 class EigRNN:
 	"""
@@ -63,5 +65,14 @@ class EigRNN:
 		return(self.eig,self.x)
 
 
-
-
+if __name__ == '__main__':
+    n_pairs = int(sys.argv[1])
+    n_basis = int(sys.argv[2])
+    print('System with {} pairs and {} basis states'.format(n_pairs,n_basis))
+    delta = float(sys.argv[3])
+    g = float(sys.argv[4])
+    epsilon = float(sys.argv[5])
+    H = hamiltonian(n_pairs,n_basis,delta,g)
+    RNN = EigRNN(H,eps=epsilon)
+    eigval,eigvec = RNN.solve()
+    print('Energy: {}'.format(eigval))
