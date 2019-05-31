@@ -2,6 +2,7 @@ import numpy as np
 import time
 import sys
 import matplotlib.pyplot as plt
+from hamiltonian import *
 
 class EigRNN:
     """
@@ -18,7 +19,7 @@ class EigRNN:
         self.A = A
         self.maxiter = maxiter
         self.eps = eps
-        self.x = np.random.rand(A.shape[0])
+        self.x = np.random.rand(self.A.shape[0])
 
     def dR(self):
         """
@@ -46,13 +47,11 @@ class EigRNN:
         g = dR.T@dR
         return( ( (a*g - e*c ) + np.sqrt( (e*c - a*g)**2 - 4*(a*f - e*b)*(b*g - c*f) ) )/(2*(b*g - c*f)))
 
-    def solve(self, timer=False):
+    def solve(self):
         """
         Returns the lowest eigenvalue of A.
         To be called after initialization.
         """
-        if timer:
-            start = time.process_time()
         convergence = False
         val = 0
         for i in range(self.maxiter):
@@ -65,12 +64,7 @@ class EigRNN:
         if not convergence:
             print('WARNING: Did not converge. Try increasing maxiter or a smaller eps.')    
 
-        if timer:
-            end = time.process_time()
-            t = end-start
-            return (self.eig,self.x,t)
-        else:
-            return(self.eig,self.x)
+        return(self.eig,self.x)
 
 
 
@@ -81,7 +75,7 @@ if __name__ == '__main__':
     delta = float(sys.argv[3])
     g = float(sys.argv[4])
     epsilon = float(sys.argv[5])
-    H = hamiltonian(n_pairs,n_basis,delta,g)
+    H,Eref = hamiltonian(n_pairs,n_basis,delta,g)
     RNN = EigRNN(H,eps=epsilon)
     eigval,eigvec = RNN.solve()
     print('Energy: {}'.format(eigval))
